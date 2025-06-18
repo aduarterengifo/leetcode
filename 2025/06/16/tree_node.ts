@@ -8,3 +8,5 @@ export class TreeNode {
         this.right = (right===undefined ? null : right)
     }
 }
+
+// if I have you 
