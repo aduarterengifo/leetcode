@@ -1,30 +1,25 @@
-const solve = (arr) => {
-    var _a;
-    const hashmap = new Map();
+const solve = (n, arr) => {
+    let max = arr[0];
+    for (const num of arr) {
+        if (num > max)
+            max = num;
+    }
+    const freq = new Uint32Array(max + 1).fill(0);
+    // count frequency.
     for (const n of arr) {
-        for (const div of getdivs(n)) {
-            hashmap.set(div, ((_a = hashmap.get(div)) !== null && _a !== void 0 ? _a : 0) + 1);
-        }
+        freq[n]++;
     }
-    let maxDivisor = 1;
-    for (const [divisor, count] of hashmap.entries()) {
-        if (count > 1 && divisor > maxDivisor) {
-            maxDivisor = divisor;
+    for (let d = max; d >= 1; d--) {
+        let count = 0;
+        for (let mult = d; mult <= max; mult += d) {
+            count += freq[mult];
+            if (count > 1)
+                break;
         }
+        if (count > 1)
+            return d;
     }
-    return maxDivisor;
-};
-const getdivs = (n) => {
-    const divisors = [];
-    for (let i = 1; i * i <= n; i++) {
-        if (n % i === 0) {
-            divisors.push(i);
-            if (i !== n / i) {
-                divisors.push(n / i);
-            }
-        }
-    }
-    return divisors;
+    return 1;
 };
 if (require.main === module) {
     let input = '';
@@ -33,6 +28,6 @@ if (require.main === module) {
         const lines = input.trim().split('\n');
         const n = Number(lines[0]);
         const arr = lines[1].trim().split(' ').map(Number);
-        console.log(solve(arr));
+        console.log(solve(n, arr));
     });
 }
